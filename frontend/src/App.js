@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-// Add this import to include Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 import CityForm from "./components/CityForm";
-import ResultAlert from "./components/ResultAlert";
+import ResultTable from "./components/ResultTable";
 
 function App() {
   const [city1, setCity1] = useState("");
   const [city2, setCity2] = useState("");
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const compareCities = async () => {
     setLoading(true);
-    setResult("");
+    setResult(null);
 
     try {
       const response = await fetch("http://localhost:5000/chat", {
@@ -24,9 +23,9 @@ function App() {
       });
 
       const data = await response.json();
-      setResult(data.response);
+      setResult(data);
     } catch (error) {
-      setResult("Error fetching data");
+      setResult({ error: "Error fetching data" });
     }
 
     setLoading(false);
@@ -34,7 +33,7 @@ function App() {
 
   return (
     <div className="container py-5">
-      <div className="card shadow mx-auto" style={{ maxWidth: 600 }}>
+      <div className="card shadow mx-auto" style={{ maxWidth: 1200 }}>
         <div className="card-body">
           <h1 className="card-title text-center mb-4">City Comparison</h1>
           <CityForm
@@ -45,7 +44,7 @@ function App() {
             onCompare={compareCities}
             loading={loading}
           />
-          <ResultAlert result={result} />
+          <ResultTable result={result} />
         </div>
       </div>
     </div>
