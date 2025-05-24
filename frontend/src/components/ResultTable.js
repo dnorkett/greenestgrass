@@ -2,7 +2,7 @@ import React from "react";
 
 function ResultTable({ result }) {
   if (!result) return null;
-  
+
   if (result.error) {
     return (
       <div className="alert alert-danger mt-4">
@@ -10,7 +10,7 @@ function ResultTable({ result }) {
       </div>
     );
   }
-  
+
   if (!Array.isArray(result.cities) || result.cities.length === 0) {
     return (
       <div className="alert alert-warning mt-4">
@@ -18,27 +18,26 @@ function ResultTable({ result }) {
       </div>
     );
   }
-  
+
+  // Dynamically get column names from the first city record
+  const columns = Object.keys(result.cities[0]);
+
   return (
     <div className="mt-4">
       <table className="table table-bordered">
         <thead className="table-light">
           <tr>
-            <th>City</th>
-            <th>Weather</th>
-            <th>Culture</th>
-            <th>Cost of Living</th>
-            <th>Job Opportunities</th>
+            {columns.map((col, index) => (
+              <th key={index}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
           {result.cities.map((city, idx) => (
             <tr key={idx}>
-              <td>{city.name}</td>
-              <td>{city.weather}</td>
-              <td>{city.culture}</td>
-              <td>{city.costOfLiving}</td>
-              <td>{city.jobOpportunities}</td>
+              {columns.map((col, index2) => (
+                <td key={index2}>{city[col]}</td>
+              ))}
             </tr>
           ))}
         </tbody>

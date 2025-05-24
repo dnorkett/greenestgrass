@@ -15,33 +15,31 @@ const openai = new OpenAI({
 });
 
 app.post("/chat", async (req, res) => {
-  // Check for the "cities" array; if not provided, use city1 and city2
-  let cities;
-  if (Array.isArray(req.body.cities) && req.body.cities.length >= 2) {
-    cities = req.body.cities;
-  } else {
-    const { city1, city2 } = req.body;
-    if (!city1 || !city2) {
-      return res.status(400).json({ error: "Please provide at least two cities." });
+  try {
+    // Check for the cities array in the request body
+    const { cities } = req.body;
+
+    if (!Array.isArray(cities) || cities.length < 2) {
+      return res.status(400).json({ 
+        error: "Please provide an array of at least two cities." 
+      });
     }
-    cities = [city1, city2];
-  }
 
-  // Build a dynamic prompt listing all cities
-  const cityListString = cities.join(", ");
-  const cityJSONEntries = cities
-    .map(
-      (city) => `{
-      "name": "${city}",
-      "weather": "...",
-      "culture": "...",
-      "costOfLiving": "...",
-      "jobOpportunities": "..."
-    }`
-    )
-    .join(",\n    ");
+    // Build a dynamic prompt listing all cities
+    const cityListString = cities.join(", ");
+    const cityJSONEntries = cities
+      .map(
+        (city) => `{
+        "name": "${city}",
+        "weather": "...",
+        "culture": "...",
+        "costOfLiving": "...",
+        "jobOpportunities": "..."
+      }`
+      )
+      .join(",\n    ");
 
-  const prompt = `
+    const prompt = `
 Compare the following cities in terms of weather, culture, cost of living, and job opportunities: ${cityListString}.
 Return ONLY a valid JSON object in this format:
 {
@@ -52,19 +50,28 @@ Return ONLY a valid JSON object in this format:
 Do not include any explanation or text outside the JSON.
 `;
 
-  try {
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "gpt-4o-mini",
+      model: "gpt-4o-mini", // Changed to correct model name
       response_format: { type: "json_object" }
     });
 
-    // Parse the JSON response from OpenAI
     const data = JSON.parse(completion.choices[0].message.content);
     res.json(data);
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Something went wrong." });
+    console.error('Error details:', error);
+    
+    // More specific error handling
+    if (error.response) {
+      res.status(error.response.status).json({ 
+        error: `OpenAI API error: ${error.response.data.error.message}` 
+      });
+    } else {
+      res.status(500).json({ 
+        error: "An error occurred while processing your request." 
+      });
+    }
   }
 });
 

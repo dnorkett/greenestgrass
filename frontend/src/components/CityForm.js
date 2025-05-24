@@ -1,6 +1,17 @@
 import React from "react";
 
-function CityForm({ city1, city2, setCity1, setCity2, onCompare, loading }) {
+function CityForm({ cities, setCities, onCompare, loading }) {
+  const handleCityChange = (index, value) => {
+    const updatedCities = [...cities];
+    updatedCities[index] = value;
+    console.log(`Updating city at index ${index}:`, value); // Debugging log
+    setCities(updatedCities);
+  };
+
+  const addCity = () => {
+    setCities([...cities, ""]);
+  };
+
   return (
     <form
       onSubmit={(e) => {
@@ -9,30 +20,28 @@ function CityForm({ city1, city2, setCity1, setCity2, onCompare, loading }) {
       }}
     >
       <div className="mx-auto" style={{ maxWidth: "400px" }}>
-        <div className="mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="First city"
-            value={city1}
-            onChange={(e) => setCity1(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Second city"
-            value={city2}
-            onChange={(e) => setCity2(e.target.value)}
-          />
+        {cities.map((city, index) => (
+          <div className="mb-3" key={index}>
+            <input
+              type="text"
+              className="form-control"
+              placeholder={`City ${index + 1}`}
+              value={city}
+              onChange={(e) => handleCityChange(index, e.target.value)}
+            />
+          </div>
+        ))}
+        <div className="mb-3 d-flex justify-content-end">
+          <button
+            type="button"
+            className="btn btn-outline-secondary btn-sm"
+            onClick={addCity}
+          >
+            + Add City
+          </button>
         </div>
         <div className="d-grid gap-2">
-          <button
-            className="btn btn-primary"
-            type="submit"
-            disabled={loading}            
-          >
+          <button className="btn btn-primary" type="submit" disabled={loading}>
             {loading ? (
               <>
                 <span
