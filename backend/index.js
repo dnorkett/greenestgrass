@@ -40,7 +40,7 @@ app.post("/chat", async (req, res) => {
       .join(",\n    ");
 
     const prompt = `
-Compare the following cities in terms of weather, culture, cost of living, and job opportunities: ${cityListString}.
+Compare the following cities and their suburbs in terms of weather, culture, cost of living, and job opportunities: ${cityListString}.
 Return ONLY a valid JSON object in this format:
 {
   "cities": [

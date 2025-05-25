@@ -12,13 +12,7 @@ function App() {
     setLoading(true);
     setResult(null);
 
-    // Filter out empty strings and trim whitespace
-    const validCities = cities
-      .map((city) => city.trim())
-      .filter((city) => city !== "");
-
-    console.log("Valid cities after filtering:", validCities);
-
+    const validCities = cities.filter((city) => city.trim() !== "");
     if (validCities.length < 2) {
       setResult({ error: "Please provide at least two cities." });
       setLoading(false);
@@ -26,32 +20,21 @@ function App() {
     }
 
     try {
-      const requestBody = {
-        cities: validCities,
-      };
-
-      console.log("Sending request body:", JSON.stringify(requestBody, null, 2));
-
       const response = await fetch("http://localhost:5000/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cities: validCities }),
       });
 
-      const responseText = await response.text();
-      console.log("Raw server response:", responseText);
-
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}, message: ${responseText}`);
+        const errorText = await response.text();
+        throw new Error(`HTTP error! ${errorText}`);
       }
 
-      const data = JSON.parse(responseText);
+      const data = await response.json();
       setResult(data);
     } catch (error) {
-      console.error("Detailed error:", error);
-      setResult({ error: `Error: ${error.message}` });
+      setResult({ error: error.message });
     } finally {
       setLoading(false);
     }
@@ -60,10 +43,10 @@ function App() {
   return (
     <div className="container py-5">
       <div className="row justify-content-center">
-        <div className="col-12 col-md-10 col-lg-8">
+        <div className="col-lg-10">
           <div className="card shadow">
             <div className="card-body">
-              <h1 className="card-title text-center mb-4">City Comparison</h1>
+              <h1 className="text-center mb-4">City Comparison</h1>
               <CityForm
                 cities={cities}
                 setCities={setCities}

@@ -4,13 +4,10 @@ function CityForm({ cities, setCities, onCompare, loading }) {
   const handleCityChange = (index, value) => {
     const updatedCities = [...cities];
     updatedCities[index] = value;
-    console.log(`Updating city at index ${index}:`, value); // Debugging log
     setCities(updatedCities);
   };
 
-  const addCity = () => {
-    setCities([...cities, ""]);
-  };
+  const addCity = () => setCities([...cities, ""]);
 
   return (
     <form
@@ -19,7 +16,7 @@ function CityForm({ cities, setCities, onCompare, loading }) {
         onCompare();
       }}
     >
-      <div className="mx-auto" style={{ maxWidth: "400px" }}>
+      <div className="mx-auto" style={{ maxWidth: "600px" }}>
         {cities.map((city, index) => (
           <div className="mb-3" key={index}>
             <input
@@ -31,7 +28,7 @@ function CityForm({ cities, setCities, onCompare, loading }) {
             />
           </div>
         ))}
-        <div className="mb-3 d-flex justify-content-end">
+        <div className="mb-3 d-flex justify-content-between">
           <button
             type="button"
             className="btn btn-outline-secondary btn-sm"
@@ -39,21 +36,8 @@ function CityForm({ cities, setCities, onCompare, loading }) {
           >
             + Add City
           </button>
-        </div>
-        <div className="d-grid gap-2">
           <button className="btn btn-primary" type="submit" disabled={loading}>
-            {loading ? (
-              <>
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Comparing...
-              </>
-            ) : (
-              "Compare Cities"
-            )}
+            {loading ? "Comparing..." : "Compare Cities"}
           </button>
         </div>
       </div>
