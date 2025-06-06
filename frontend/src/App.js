@@ -13,13 +13,12 @@ function App() {
 
   // Function to handle the comparison of cities
   const compareCities = async () => {
-    setLoading(true); // Set loading to true while the API call is in progress
-    setResult(null); // Clear any previous results
+    setLoading(true); 
+    setResult(null); 
 
     // Filter out empty city inputs
     const validCities = cities.filter((city) => city.trim() !== "");
-    if (validCities.length < 2) {
-      // If fewer than two valid cities, show an error
+    if (validCities.length < 2) {      
       setResult({ error: "Please provide at least two cities." });
       setLoading(false);
       return;
@@ -52,10 +51,8 @@ function App() {
   };
 
  return (
-    <div className="container py-5">
-      {/* Main container with padding */}
-      <div className="row justify-content-center">
-        {/* Center the content */}
+    <div className="container py-5">      
+      <div className="row justify-content-center">        
         <div className="col-lg-10">
           {/* Card to hold the form and results */}
           <div className="card shadow">

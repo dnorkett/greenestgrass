@@ -1,6 +1,5 @@
 import React from "react";
 
-// CityForm component for handling user input
 function CityForm({ cities, setCities, onCompare, loading }) {
   // Function to handle changes in city input fields
   const handleCityChange = (index, value) => {
@@ -39,7 +38,7 @@ function CityForm({ cities, setCities, onCompare, loading }) {
             className="btn btn-outline-secondary btn-sm"
             onClick={addCity}
           >
-            + Add City
+            Add City
           </button>          
           <button className="btn btn-primary" type="submit" disabled={loading}>
             {loading ? "Comparing..." : "Compare Cities"} {/* Show loading state */}
