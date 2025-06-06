@@ -2,7 +2,7 @@
 
 ## Project Name: GreenestGrass - City Comparison Application
 **Date:** May 24, 2025  
-**Author:** [Your Name]  
+**Author:** [Don Norkett]  
 
 ---
 

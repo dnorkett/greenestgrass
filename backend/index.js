@@ -52,7 +52,7 @@ Do not include any explanation or text outside the JSON.
 
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "gpt-4o-mini", // Changed to correct model name
+      model: "gpt-4o-mini", 
       response_format: { type: "json_object" }
     });
 
